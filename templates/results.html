@@ -18,11 +18,11 @@
                                  style="width: 80px; height: auto; opacity: 0.8;">
                         </div>
                         <div class="col-md-6">
-                            <h2 class="mb-0">
+                            <h2 class="mb-0" style="color: #000;">
                                 <i class="fas fa-chart-line me-3"></i>
                                 Heart Health Assessment Results
                             </h2>
-                            <p class="mb-0 mt-2">Based on your provided health information</p>
+                            <p class="mb-0 mt-2" style="color: #333;">Based on your provided health information</p>
                         </div>
                         <div class="col-md-3 text-end">
                             <img src="{{ url_for('static', filename='images/heart-medical.svg') }}" 
@@ -46,6 +46,7 @@
             </div>
         </div>
 
+        
         <!-- Results Cards -->
         {% for result in results %}
         <div class="row justify-content-center mb-4">
@@ -290,15 +291,7 @@
 
     <!-- Medical Disclaimer -->
     <div class="row justify-content-center mt-4">
-        <div class="col-lg-10">
-            <div class="alert alert-warning border-warning">
-                <h6><i class="fas fa-exclamation-triangle me-2"></i>Important Medical Disclaimer</h6>
-                <p class="mb-0 small">
-                    This assessment is for informational and educational purposes only and should not be considered as medical advice, diagnosis, or treatment recommendation. 
-                    The results are based on statistical models and may not account for all individual health factors. 
-                    Always consult with qualified healthcare professionals for proper medical evaluation, diagnosis, and treatment decisions. 
-                    Do not use this tool to replace regular medical care or delay seeking professional medical attention.
-                </p>
+        <div class="col-lg-10">  
             </div>
         </div>
     </div>

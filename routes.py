@@ -19,12 +19,8 @@ def input_form():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    """Process form data and make predictions"""
     try:
-        # Extract form data
         form_data = {}
-        
-        # Collect all form inputs (handling optional fields)
         fields = [
             'age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 
             'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'bmi',
@@ -32,26 +28,37 @@ def predict():
             'family_history', 'diabetes', 'heart_rate_variability', 'valve_noise',
             'aortic_size', 'infection_history', 'congenital_defect'
         ]
-        
+
+        at_least_one_input = False
+
         for field in fields:
             value = request.form.get(field)
             if value and value.strip():
+                at_least_one_input = True
                 try:
-                    # Convert to appropriate type
-                    if field in ['sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal',
-                               'smoking', 'alcohol_intake', 'family_history', 'diabetes',
-                               'valve_noise', 'infection_history', 'congenital_defect']:
-                        form_data[field] = int(value)
-                    else:
-                        form_data[field] = float(value)
+                    form_data[field] = int(value) if field in [
+                        'sex', 'cp', 'fbs', 'restecg', 'exang', 'slope', 'ca', 'thal',
+                        'smoking', 'alcohol_intake', 'family_history', 'diabetes',
+                        'valve_noise', 'infection_history', 'congenital_defect'
+                    ] else float(value)
                 except ValueError:
-                    logging.warning(f"Invalid value for {field}: {value}")
-                    continue
-        
-        if not form_data:
-            flash('Please fill in at least one health parameter.', 'error')
+                    flash(f"Invalid value for {field}: {value}", 'error')
+
+        if not form_data or len(form_data) < 3:  # Require at least 3 fields
+            flash('Please fill in at least 3 health parameters for accurate prediction.', 'error')
             return redirect(url_for('input_form'))
-        
+
+        predictions = predictor.predict(form_data)
+
+        session['form_data'] = form_data
+        session['predictions'] = predictions
+        return redirect(url_for('results'))
+
+    except Exception as e:
+        logging.error(f"Prediction error: {e}")
+        flash("An unexpected error occurred during prediction.", "error")
+        return redirect(url_for('input_form'))
+
         # Make predictions
         predictions = predictor.predict(form_data)
         

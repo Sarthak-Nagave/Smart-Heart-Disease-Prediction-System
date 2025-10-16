@@ -260,7 +260,7 @@ body {
 
 .badge-risk-high {
     background-color: var(--medical-danger);
-    color: white;
+    color: rgb(255, 255, 255);
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
 }
